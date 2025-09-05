@@ -6,6 +6,7 @@ import { LeadsGetManyInput, LeadsGetManyOutput } from '../types/leads/getMany'
 import { LeadsGetOneInput, LeadsGetOneOutput } from '../types/leads/getOne'
 import { LeadsUpdateInput, LeadsUpdateOutput } from '../types/leads/update'
 import { LeadsBulkImportInput, LeadsBulkImportOutput } from '../types/leads/bulkImport'
+import { LeadsVerifyEmailsInput, LeadsVerifyEmailsOutput } from '../types/leads/verifyEmails'
 import { ApiModule, endpoint } from '../utils'
 
 export const leadsApi = {
@@ -20,4 +21,5 @@ export const leadsApi = {
     '/leads/generate-messages'
   ),
   bulkImport: endpoint<LeadsBulkImportOutput, LeadsBulkImportInput>('post', '/leads/bulk'),
+  verifyEmails: endpoint<LeadsVerifyEmailsOutput, LeadsVerifyEmailsInput>('post', '/leads/verify-emails'),
 } as const satisfies ApiModule

@@ -11,9 +11,9 @@ Welcome to the **TinyGenesy** take‑home! This exercise is a condensed version 
 
 1. Review an open PR that implements a new feature.
 
-2. Investigate & fix a reported CSV import bug (details below).
+2. Implement a new feature (details below).
 
-3. Implement a new feature (details below).
+3. Investigate & fix a reported CSV import bug (details below).
 
 4. Analyze the codebase and propose improvements.
 
@@ -28,11 +28,15 @@ Welcome to the **TinyGenesy** take‑home! This exercise is a condensed version 
 
 - **SQLite** (bundled; no separate install required).
 
+- **Temporal** Workflow management system.
+
 Install tools:
 
 - Node via nvm: https://github.com/nvm-sh/nvm#installing-and-updating
 
 - pnpm: https://pnpm.io/installation#using-other-package-managers
+
+- Temporal: https://docs.temporal.io/develop/typescript/set-up-your-local-typescript
 
 ### Environment setup
 
@@ -40,10 +44,11 @@ Install tools:
 
 ```zsh
 cd backend
-nvm use                # Ensure the Node version from .nvmrc
-pnpm install           # Install dependencies
-pnpm migrate:dev       # Sync local SQLite with Prisma schema
-pnpm gen:prisma        # Generate Prisma client
+nvm use                   # Ensure the Node version from .nvmrc
+pnpm install              # Install dependencies
+pnpm migrate:dev          # Sync local SQLite with Prisma schema
+pnpm gen:prisma           # Generate Prisma client
+temporal server start-dev # Starts Temporal server
 ```
 
 **Backend (develop)**
@@ -75,37 +80,68 @@ pnpm run dev           # Starts the dev server
 
 ## Task Description
 
-### PR review
+### New Feature — Temporal Phone Waterfall
 
-Review the open PR as if it were from a teammate. Add any inline comments you find necessary and provide a final summary with either an approval or a change-request decision.
+Implement a **Temporal workflow** that finds a user’s phone number by querying three providers in sequence:
+
+1. Call **Provider One** → if no phone found,  
+2. Call **Provider Two** → if no phone found,  
+3. Call **Provider Three** → if no phone found, mark as **No data found**.
+
+#### Requirements
+- Each provider call is an **activity** with:
+  - Short timeout
+  - Retry policy (e.g. 3 attempts, exponential backoff)
+- Stop early when a phone is found.
+- Idempotent workflow (only one per lead).
+- Abstraction layer to handle different provider inputs.
+- Show process feedback to the user
+- Update frontend accordingly
+
+#### Provider APIs
+
+**Orion Connect**
+> Provider with the best data in the market, but slow and fails sometimes
+>
+> Base URL: `https://api.genesy.ai/api/tmp/orionConnect`
+>
+> Request: `{ "fullName": "Ada Lovelace", "companyWebsite": "example.com" }`
+>
+> Authentication: `Request header 'x-auth-me' with key 'mySecretKey123'`
+>
+> Response: `POST { "phone": string | null }`
+
+**Astra Dialer**
+> Provider with the worst data in the market, but is the fastest one
+>
+> Base URL: `https://api.genesy.ai/api/tmp/astraDialer`
+>
+> Request: `POST { "email": "john.doe@example.com" }`
+>
+> Authentication: `Request header 'apiKey' with key '1234jhgf'`
+>
+> Response: `{ "phoneNmbr": string | null | undefined }`
+
+**Nimbus Lookup**
+> New provider in the market
+>
+> Base URL: `https://api.genesy.ai/api/tmp/numbusLookup`
+>
+> Request: `POST { "email": "john.doe@example.com", jobTitle: "CTO" }`
+>
+> Authentication: `Get parameter 'api' with key '000099998888'`
+>
+> Response: `{ "number": number, "countryCode": "string" }`
 
 ### Bug reported
 
 When importing from CSV, the country column displays strange characters that do not match valid country codes. I have been using the example CSV file.
 
-
-### New feature
-
-Some users have mentioned they would like to track more data points for their leads.
-We are adding the following fields: lead’s phone number, years at their current company, and LinkedIn profile.
-
-We want users to be able to:
-
- 1. See the new field in the table of leads
- 2. Manually set those fields using the import from csv feature
- 3. Use the new fields in the message composition
-
-Since the list of fields will continue to grow, we need to improve the UX of the message composition (no design provided).
+Some users have also complained that the email verification feature keeps running forever for some cases and does not give any kind of information.
 
 ### Codebase Analysis & Roadmap
 
-Create an `IMPROVEMENTS.md` file as if it were a document in our project management tool. The goal is to capture:
-- Top priorities identified, with an Impact vs. Effort assessment
-- Quick wins (small, high-value changes)
-- Larger refactors that require more investment
-- Potential bugs and risky areas
-- Opportunities for better UX patterns
-- Developer experience (DX) improvements such as tooling, tests, and type safety
+Create an `IMPROVEMENTS.md` file as if it was a document in our project management tool.
 
 #### Note on AI use
 
@@ -119,4 +155,3 @@ You won’t be evaluated on producing a single predefined _correct solution_, bu
 Work in the repository as you see fit. When you’re done, just ping us.
 
 We value the time you invest in this task, and we commit to spending a similar amount reviewing it thoroughly. Regardless of the outcome, we’ll provide constructive feedback so you can benefit from the evaluation.
-
