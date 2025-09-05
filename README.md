@@ -9,13 +9,11 @@ Welcome to the **TinyGenesy** take‑home! This exercise is a condensed version 
 
 ## What you’ll do (at a glance)
 
-1. Review an open PR that implements a new feature.
+1. Implement a new feature (details below).
 
-2. Implement a new feature (details below).
+2. Investigate & fix two reported bugs (details below).
 
-3. Investigate & fix a reported CSV import bug (details below).
-
-4. Analyze the codebase and propose improvements.
+3. Analyze the codebase and propose improvements.
 
 
 ## Getting Started
@@ -97,6 +95,11 @@ Implement a **Temporal workflow** that finds a user’s phone number by querying
 - Abstraction layer to handle different provider inputs.
 - Show process feedback to the user
 - Update frontend accordingly
+
+#### Nice to have
+
+Take into account provider rate limits, right now they have unlimited RPS/RPM, however they told us they will add rate limits to their endpoints.
+
 
 #### Provider APIs
 
