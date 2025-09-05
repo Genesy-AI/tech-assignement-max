@@ -28,11 +28,15 @@ Welcome to the **TinyGenesy** take‑home! This exercise is a condensed version 
 
 - **SQLite** (bundled; no separate install required).
 
+- **Temporal** Workflow management system.
+
 Install tools:
 
 - Node via nvm: https://github.com/nvm-sh/nvm#installing-and-updating
 
 - pnpm: https://pnpm.io/installation#using-other-package-managers
+
+- Temporal: https://docs.temporal.io/develop/typescript/set-up-your-local-typescript
 
 ### Environment setup
 
@@ -40,10 +44,11 @@ Install tools:
 
 ```zsh
 cd backend
-nvm use                # Ensure the Node version from .nvmrc
-pnpm install           # Install dependencies
-pnpm migrate:dev       # Sync local SQLite with Prisma schema
-pnpm gen:prisma        # Generate Prisma client
+nvm use                   # Ensure the Node version from .nvmrc
+pnpm install              # Install dependencies
+pnpm migrate:dev          # Sync local SQLite with Prisma schema
+pnpm gen:prisma           # Generate Prisma client
+temporal server start-dev # Starts Temporal server
 ```
 
 **Backend (develop)**
@@ -79,7 +84,7 @@ pnpm run dev           # Starts the dev server
 
 Review the open PR as if it were from a teammate. Add any inline comments you find necessary and provide a final summary with either an approval or a change-request decision.
 
-### New feature
+### New feature (Front)
 
 Some users have mentioned they would like to track more data points for their leads.
 We are adding the following fields: lead’s phone number, years at their current company, and LinkedIn profile.
@@ -92,10 +97,57 @@ We want user to be able to:
 
 Since the list of fields will continue to grow, we need to improve the UX of the message composition (no design provided).
 
+### New Feature — Temporal Phone Waterfall
 
+Implement a **Temporal workflow** that finds a user’s phone number by querying three providers in sequence:
+
+1. Call **Provider One** → if no phone found,  
+2. Call **Provider Two** → if no phone found,  
+3. Call **Provider Three** → if no phone found, mark as **No data found**.
+
+#### Requirements
+- Each provider call is an **activity** with:
+  - Short timeout
+  - Retry policy (e.g. 3 attempts, exponential backoff)
+- Stop early when a phone is found.
+- Idempotent workflow (only one per lead).
+- Abstraction layer to handle different provider inputs.
+- Show process feedback to the user
+- Update frontend accordingly
+
+#### Provider APIs
+
+**Orion Connect**
+> Provider with the best data in the market
+>
+> Base URL: `https://api.genesy.ai/api/tmp/orionConnect`
+>
+> Request: `{ "fullName": "Ada Lovelace", "companyWebsite": "example.com" }`
+>
+> Response: `{ "phone": string | null }`
+
+**Astra Dialer**
+> Provider with the best data in the market
+>
+> Base URL: `https://api.genesy.ai/api/tmp/astraDialer`
+>
+> Request: `{ "email": "john.doe@example.com" }`
+>
+> Response: `{ "phoneNmbr": string | null | undefined }`
+
+**Nimbus Lookup**
+> Provider with the best data in the market
+>
+> Base URL: `https://api.genesy.ai/api/tmp/numbusLookup`
+>
+> Request: `{ "email": "john.doe@example.com", jobTitle: "CTO" }`
+>
+> Response: `{ "number": number, "countryCode": "string" }`
 ### Bug reported
 
 When importing from CSV, the country column displays strange characters that do not match valid country codes. I have been using the example CSV file.
+
+Some users have also complained that the email verification feature keeps running forever for some cases and does not give any kind of information.
 
 ### Codebase Analysis & Roadmap
 

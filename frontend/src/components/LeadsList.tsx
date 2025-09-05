@@ -35,6 +35,22 @@ export const LeadsList: FC = () => {
     }
   })
 
+  const verifyEmailsMutation = useMutation({
+    mutationFn: async (ids: number[]) => api.leads.verifyEmails({ leadIds: ids }),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['leads', 'getMany'] })
+      setIsEnrichDropdownOpen(false)
+      toast.success(
+        data.verifiedCount === 1
+          ? `Verified ${data.verifiedCount} email`
+          : `Verified ${data.verifiedCount} emails`
+      )
+    },
+    onError: () => {
+      toast.error('Failed to verify emails. Please try again.')
+    }
+  })
+
   const handleSelectAll = (checked: boolean) => {
     if (checked && leads.data) {
       setSelectedLeads(leads.data.map(lead => lead.id))
@@ -129,6 +145,17 @@ export const LeadsList: FC = () => {
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                         </svg>
                         Generate Messages
+                      </div>
+                    </button>
+                    <button
+                      onClick={() => verifyEmailsMutation.mutate(selectedLeads)}
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                    >
+                      <div className="flex items-center">
+                        <svg className="mr-3 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 12H8m8 0a8 8 0 11-16 0 8 8 0 0116 0zm-8 0V4" />
+                        </svg>
+                        Verify Email
                       </div>
                     </button>
                     <button
@@ -237,7 +264,7 @@ export const LeadsList: FC = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-900">{lead.email || '-'}</div>
+                    <div className="text-sm text-gray-900">{lead.email || '-'} {lead.emailVerified === null ? '❓' : lead.emailVerified ? '✅' : '❌'}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-900">{lead.jobTitle || '-'}</div>
