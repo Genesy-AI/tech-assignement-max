@@ -80,23 +80,6 @@ pnpm run dev           # Starts the dev server
 
 ## Task Description
 
-### PR review
-
-Review the open PR as if it were from a teammate. Add any inline comments you find necessary and provide a final summary with either an approval or a change-request decision.
-
-### New feature (Front)
-
-Some users have mentioned they would like to track more data points for their leads.
-We are adding the following fields: lead’s phone number, years at their current company, and LinkedIn profile.
-
-We want user to be able to:
-
- 1. See the new field in the table of leads
- 2. Manually set those fields using the import from csv feature
- 3. Use the new fields in the message composition
-
-Since the list of fields will continue to grow, we need to improve the UX of the message composition (no design provided).
-
 ### New Feature — Temporal Phone Waterfall
 
 Implement a **Temporal workflow** that finds a user’s phone number by querying three providers in sequence:
@@ -149,6 +132,7 @@ Implement a **Temporal workflow** that finds a user’s phone number by querying
 > Authentication: `Get parameter 'api' with key '000099998888'`
 >
 > Response: `{ "number": number, "countryCode": "string" }`
+
 ### Bug reported
 
 When importing from CSV, the country column displays strange characters that do not match valid country codes. I have been using the example CSV file.
@@ -171,4 +155,3 @@ You won’t be evaluated on producing a single predefined _correct solution_, bu
 Work in the repository as you see fit. When you’re done, just ping us.
 
 We value the time you invest in this task, and we commit to spending a similar amount reviewing it thoroughly. Regardless of the outcome, we’ll provide constructive feedback so you can benefit from the evaluation.
-
