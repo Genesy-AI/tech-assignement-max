@@ -118,29 +118,35 @@ Implement a **Temporal workflow** that finds a user’s phone number by querying
 #### Provider APIs
 
 **Orion Connect**
-> Provider with the best data in the market
+> Provider with the best data in the market, but slow and fails sometimes
 >
 > Base URL: `https://api.genesy.ai/api/tmp/orionConnect`
 >
 > Request: `{ "fullName": "Ada Lovelace", "companyWebsite": "example.com" }`
 >
-> Response: `{ "phone": string | null }`
+> Authentication: `Request header 'x-auth-me' with key 'mySecretKey123'`
+>
+> Response: `POST { "phone": string | null }`
 
 **Astra Dialer**
-> Provider with the best data in the market
+> Provider with the worst data in the market, but is the fastest one
 >
 > Base URL: `https://api.genesy.ai/api/tmp/astraDialer`
 >
-> Request: `{ "email": "john.doe@example.com" }`
+> Request: `POST { "email": "john.doe@example.com" }`
+>
+> Authentication: `Request header 'apiKey' with key '1234jhgf'`
 >
 > Response: `{ "phoneNmbr": string | null | undefined }`
 
 **Nimbus Lookup**
-> Provider with the best data in the market
+> New provider in the market
 >
 > Base URL: `https://api.genesy.ai/api/tmp/numbusLookup`
 >
-> Request: `{ "email": "john.doe@example.com", jobTitle: "CTO" }`
+> Request: `POST { "email": "john.doe@example.com", jobTitle: "CTO" }`
+>
+> Authentication: `Get parameter 'api' with key '000099998888'`
 >
 > Response: `{ "number": number, "countryCode": "string" }`
 ### Bug reported
