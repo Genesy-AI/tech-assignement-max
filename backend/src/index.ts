@@ -2,7 +2,7 @@ import { PrismaClient } from '@prisma/client'
 import express, { Request, Response } from 'express'
 import { Connection, Client } from '@temporalio/client'
 import { verifyEmailWorkflow } from './workflows'
-import { generateMessageFromTemplate } from './utils/messageGenerator'
+import { generateMessageFromTemplate, Lead } from './utils/messageGenerator'
 import { runTemporalWorker } from './worker'
 const prisma = new PrismaClient()
 const app = express()
@@ -217,7 +217,7 @@ app.post('/leads/bulk', async (req: Request, res: Response) => {
     })
 
     let importedCount = 0
-    const errors: Array<{ lead: any; error: string }> = []
+    const errors: Array<{ lead: Lead; error: string }> = []
 
     for (const lead of uniqueLeads) {
       try {
