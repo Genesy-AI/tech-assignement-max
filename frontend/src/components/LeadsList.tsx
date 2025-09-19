@@ -51,6 +51,20 @@ export const LeadsList: FC = () => {
     },
   })
 
+  const findPhoneNumbersMutation = useMutation({
+    mutationFn: async (ids: number[]) => api.leads.findPhoneNumbers({ leadIds: ids }),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['leads', 'getMany'] })
+      setIsEnrichDropdownOpen(false)
+      toast.success(
+        data.foundCount === 1 ? `Found ${data.foundCount} phone` : `Found ${data.foundCount} phones`
+      )
+    },
+    onError: () => {
+      toast.error('Failed to find phones. Please try again.')
+    },
+  })
+
   const handleSelectAll = (checked: boolean) => {
     if (checked && leads.data) {
       setSelectedLeads(leads.data.map((lead) => lead.id))
@@ -233,10 +247,7 @@ export const LeadsList: FC = () => {
                       </div>
                     </button>
                     <button
-                      onClick={() => {
-                        toast.error('Phone finder feature is not yet implemented')
-                        setIsEnrichDropdownOpen(false)
-                      }}
+                      onClick={() => findPhoneNumbersMutation.mutate(selectedLeads)}
                       className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                     >
                       <div className="flex items-center">
