@@ -365,6 +365,12 @@ export const LeadsList: FC = () => {
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50"
                 >
+                  Phone
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50"
+                >
                   Job Title
                 </th>
                 <th
@@ -420,6 +426,9 @@ export const LeadsList: FC = () => {
                         {lead.email || '-'}{' '}
                         {lead.emailVerified === null ? '❓' : lead.emailVerified ? '✅' : '❌'}
                       </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-900">{lead.phone || '-'} </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900">{lead.jobTitle || '-'}</div>
