@@ -356,6 +356,8 @@ app.post('/leads/find-phone-numbers', async (req: Request, res: Response) => {
           ],
         })
 
+        if (!phone) continue
+
         await prisma.lead.update({
           where: { id: lead.id },
           data: { phone },
