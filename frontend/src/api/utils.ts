@@ -7,18 +7,22 @@ export function endpoint<Output>(
   method: 'get' | 'delete' | 'post' | 'put' | 'patch',
   path: string
 ): () => Promise<Output>
+
 export function endpoint<Output, Input extends undefined>(
   method: 'get' | 'delete' | 'post' | 'put' | 'patch',
   path: string
 ): (...args: Exclude<Input, undefined> extends never ? [] : [Input]) => Promise<Output>
+
 export function endpoint<Output, Input>(
   method: 'get' | 'delete' | 'post' | 'put' | 'patch',
   path: string
 ): (body: Input) => Promise<Output>
+
 export function endpoint<Output, Input>(
   method: 'get' | 'delete' | 'post' | 'put' | 'patch',
   pathBuilder: (q: Input) => string
 ): (body: Input) => Promise<Output>
+
 export function endpoint<Output, Input>(
   method: 'get' | 'delete' | 'post' | 'put' | 'patch',
   urlBuilder: string | ((q: Input) => string)
