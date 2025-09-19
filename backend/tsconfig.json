@@ -16,5 +16,5 @@
 
     "skipLibCheck": true
   },
-  "exclude": ["node_modules", "dist", "eslint.config.mts"]
+  "exclude": ["node_modules", "dist", "eslint.config.mts", "vitest.config.ts"]
 }
