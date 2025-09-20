@@ -2,10 +2,11 @@ import 'dotenv/config'
 import { PrismaClient } from '@prisma/client'
 import express, { Request, Response } from 'express'
 import { Connection, Client } from '@temporalio/client'
+import z from 'zod'
+
 import { findPhoneNumberWorkflow, verifyEmailWorkflow } from './workflows'
 import { generateMessageFromTemplate, Lead } from './utils/messageGenerator'
 import { runTemporalWorker } from './worker'
-import z from 'zod'
 
 const prisma = new PrismaClient()
 
@@ -343,13 +344,15 @@ app.post('/leads/find-phone-numbers', async (req: Request, res: Response) => {
 
     for (const lead of leads) {
       try {
+        const possibleCompanyWebsite = `https://${lead.companyName?.split(' ').join().trim().toLowerCase()}.com`
+
         const phone = await client.workflow.execute(findPhoneNumberWorkflow, {
           taskQueue: 'myQueue',
           workflowId: `find-phone-number-${lead.id}-${Date.now()}`,
           args: [
             {
               fullName: `${lead.firstName} ${lead.lastName}`,
-              companyWebsite: `https://${lead.companyName}.com`,
+              companyWebsite: possibleCompanyWebsite,
               email: lead.email,
               jobTitle: lead.jobTitle,
             },
@@ -374,10 +377,12 @@ app.post('/leads/find-phone-numbers', async (req: Request, res: Response) => {
 
     await connection.close()
 
-    res.json({ success: true, verifiedCount: foundCount, results, errors })
+    console.log(JSON.stringify({ success: true, foundCount, results, errors }))
+
+    res.json({ success: true, foundCount, results, errors })
   } catch (error) {
-    console.error('Error verifying emails:', error)
-    res.status(500).json({ error: 'Failed to verify emails' })
+    console.error('Error finding phones:', error)
+    res.status(500).json({ error: 'Failed to find phones' })
   }
 })
 
