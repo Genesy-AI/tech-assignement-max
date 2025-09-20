@@ -4,6 +4,8 @@ import toast from 'react-hot-toast'
 import { api } from '../api'
 import { MessageTemplateModal } from './MessageTemplateModal'
 import { CsvImportModal } from './CsvImportModal'
+import { PhoneIcon } from '../icons/PhoneIcon'
+import { Spinner } from '../icons/Spinner'
 
 export const LeadsList: FC = () => {
   const [selectedLeads, setSelectedLeads] = useState<number[]>([])
@@ -48,6 +50,20 @@ export const LeadsList: FC = () => {
     },
     onError: () => {
       toast.error('Failed to verify emails. Please try again.')
+    },
+  })
+
+  const findPhoneNumbersMutation = useMutation({
+    mutationFn: async (ids: number[]) => api.leads.findPhoneNumbers({ leadIds: ids }),
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['leads', 'getMany'] })
+      setIsEnrichDropdownOpen(false)
+      toast.success(
+        data.foundCount === 1 ? `Found ${data.foundCount} phone` : `Found ${data.foundCount} phones`
+      )
+    },
+    onError: () => {
+      toast.error('Failed to find phones. Please try again.')
     },
   })
 
@@ -232,6 +248,25 @@ export const LeadsList: FC = () => {
                         Guess Gender
                       </div>
                     </button>
+                    <button
+                      onClick={() => findPhoneNumbersMutation.mutate(selectedLeads)}
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                      disabled={selectedLeads.length === 0 || findPhoneNumbersMutation.isPending}
+                    >
+                      <div className="flex items-center">
+                        {findPhoneNumbersMutation.isPending ? (
+                          <div className="flex items-center gap-3">
+                            <Spinner />
+                            Searching...
+                          </div>
+                        ) : (
+                          <>
+                            <PhoneIcon />
+                            Find phone number
+                          </>
+                        )}
+                      </div>
+                    </button>
                   </div>
                 </div>
               )}
@@ -322,6 +357,12 @@ export const LeadsList: FC = () => {
                   scope="col"
                   className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50"
                 >
+                  Phone
+                </th>
+                <th
+                  scope="col"
+                  className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider bg-gray-50"
+                >
                   Job Title
                 </th>
                 <th
@@ -377,6 +418,9 @@ export const LeadsList: FC = () => {
                         {lead.email || '-'}{' '}
                         {lead.emailVerified === null ? '❓' : lead.emailVerified ? '✅' : '❌'}
                       </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-900">{lead.phone || '-'} </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm text-gray-900">{lead.jobTitle || '-'}</div>
