@@ -1,19 +1,14 @@
 import axios from 'axios'
 import { envVariables } from '../../../../config/envVariables'
-import { FindPhoneNumberInputData, PhoneNumberProvider } from './PhoneNumberProvider'
+import { FindPhoneNumberInputData, PhoneNumberProvider } from './phoneNumberProvider'
 import z from 'zod'
 
 const orionConnectRequestBodySchema = z.object({ fullName: z.string(), companyWebsite: z.url() })
 
 type OrionConnectResponse = { phone: string | null }
 
-export class OrionConnectPhoneNumberProvider implements PhoneNumberProvider {
-  baseUrl: string
-
-  constructor() {
-    this.baseUrl = 'https://api.genesy.ai/api/tmp/orionConnect'
-  }
-
+export const orionConnectPhoneNumberProvider: PhoneNumberProvider = {
+  baseUrl: 'https://api.genesy.ai/api/tmp/orionConnect',
   async findPhone(inputData: FindPhoneNumberInputData): Promise<string | null> {
     const payload = orionConnectRequestBodySchema.parse(inputData)
 
@@ -24,5 +19,5 @@ export class OrionConnectPhoneNumberProvider implements PhoneNumberProvider {
     })
 
     return data.phone
-  }
+  },
 }

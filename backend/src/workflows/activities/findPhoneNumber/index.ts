@@ -1,11 +1,11 @@
 import * as providers from './phoneNumberProviders'
-import { FindPhoneNumberInputData } from './phoneNumberProviders/PhoneNumberProvider'
+import { FindPhoneNumberInputData } from './phoneNumberProviders/phoneNumberProvider'
 
 export const findPhoneWithOrionConnect = (inputData: FindPhoneNumberInputData) =>
-  new providers.OrionConnectPhoneNumberProvider().findPhone(inputData)
+  providers.orionConnectPhoneNumberProvider.findPhone(inputData)
 
 export const findPhoneWithAstraDialer = (inputData: FindPhoneNumberInputData) =>
-  new providers.AstraDialerPhoneNumberProvider().findPhone(inputData)
+  providers.astraDialerPhoneNumberProvider.findPhone(inputData)
 
 export const findPhoneWithNimbusLookup = (inputData: FindPhoneNumberInputData) =>
-  new providers.NimbusLookupPhoneNumberProvider().findPhone(inputData)
+  providers.nimbusLookupPhoneNumberProvider.findPhone(inputData)

@@ -1,19 +1,14 @@
 import axios from 'axios'
 import { envVariables } from '../../../../config/envVariables'
-import { FindPhoneNumberInputData, PhoneNumberProvider } from './PhoneNumberProvider'
+import { FindPhoneNumberInputData, PhoneNumberProvider } from './phoneNumberProvider'
 import z from 'zod'
 
 const astraDialerRequestBodySchema = z.object({ email: z.email() })
 
 type AstraDialerResponse = { phoneNmbr: string | null | undefined }
 
-export class AstraDialerPhoneNumberProvider implements PhoneNumberProvider {
-  baseUrl: string
-
-  constructor() {
-    this.baseUrl = 'https://api.genesy.ai/api/tmp/astraDialer'
-  }
-
+export const astraDialerPhoneNumberProvider: PhoneNumberProvider = {
+  baseUrl: 'https://api.genesy.ai/api/tmp/astraDialer',
   async findPhone(inputData: FindPhoneNumberInputData): Promise<string | null> {
     const payload = astraDialerRequestBodySchema.parse(inputData)
 
@@ -24,5 +19,5 @@ export class AstraDialerPhoneNumberProvider implements PhoneNumberProvider {
     })
 
     return data.phoneNmbr ?? null
-  }
+  },
 }

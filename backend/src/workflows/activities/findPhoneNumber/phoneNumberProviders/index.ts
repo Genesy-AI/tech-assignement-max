@@ -1,5 +1,5 @@
-import { AstraDialerPhoneNumberProvider } from './AstraDialerPhoneNumberProvider'
-import { NimbusLookupPhoneNumberProvider } from './NimbusLookupPhoneNumberProvider'
-import { OrionConnectPhoneNumberProvider } from './OrionConnectPhoneNumberProvider'
+import { astraDialerPhoneNumberProvider } from './astraDialerPhoneNumberProvider'
+import { nimbusLookupPhoneNumberProvider } from './nimbusLookupPhoneNumberProvider'
+import { orionConnectPhoneNumberProvider } from './orionConnectPhoneNumberProvider'
 
-export { AstraDialerPhoneNumberProvider, NimbusLookupPhoneNumberProvider, OrionConnectPhoneNumberProvider }
+export { astraDialerPhoneNumberProvider, nimbusLookupPhoneNumberProvider, orionConnectPhoneNumberProvider }
