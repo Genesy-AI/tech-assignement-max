@@ -6,6 +6,7 @@ import { MessageTemplateModal } from './MessageTemplateModal'
 import { CsvImportModal } from './CsvImportModal'
 import { PhoneIcon } from '../icons/PhoneIcon'
 import { Spinner } from '../icons/Spinner'
+import { ClockIcon } from '../icons/ClockIcon'
 
 export const LeadsList: FC = () => {
   const [selectedLeads, setSelectedLeads] = useState<number[]>([])
@@ -204,23 +205,20 @@ export const LeadsList: FC = () => {
                     <button
                       onClick={() => verifyEmailsMutation.mutate(selectedLeads)}
                       className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                      disabled={selectedLeads.length === 0 || verifyEmailsMutation.isPending}
                     >
                       <div className="flex items-center">
-                        <svg
-                          className="mr-3 h-4 w-4"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M16 12H8m8 0a8 8 0 11-16 0 8 8 0 0116 0zm-8 0V4"
-                          />
-                        </svg>
-                        Verify Email
+                        {verifyEmailsMutation.isPending ? (
+                          <div className="flex items-center gap-3">
+                            <Spinner />
+                            <span>Verifying...</span>
+                          </div>
+                        ) : (
+                          <>
+                            <ClockIcon />
+                            <span>Verify Email</span>
+                          </>
+                        )}
                       </div>
                     </button>
                     <button
@@ -257,12 +255,12 @@ export const LeadsList: FC = () => {
                         {findPhoneNumbersMutation.isPending ? (
                           <div className="flex items-center gap-3">
                             <Spinner />
-                            Searching...
+                            <span>Searching...</span>
                           </div>
                         ) : (
                           <>
                             <PhoneIcon />
-                            Find phone number
+                            <span>Find phone number</span>
                           </>
                         )}
                       </div>
