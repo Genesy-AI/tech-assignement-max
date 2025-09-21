@@ -210,12 +210,12 @@ export const LeadsList: FC = () => {
                         {verifyEmailsMutation.isPending ? (
                           <div className="flex items-center gap-3">
                             <Spinner />
-                            Verifying...
+                            <span>Verifying...</span>
                           </div>
                         ) : (
                           <>
                             <ClockIcon />
-                            Verify Email
+                            <span>Verify Email</span>
                           </>
                         )}
                       </div>
@@ -254,12 +254,12 @@ export const LeadsList: FC = () => {
                         {findPhoneNumbersMutation.isPending ? (
                           <div className="flex items-center gap-3">
                             <Spinner />
-                            Searching...
+                            <span>Searching...</span>
                           </div>
                         ) : (
                           <>
                             <PhoneIcon />
-                            Find phone number
+                            <span>Find phone number</span>
                           </>
                         )}
                       </div>
