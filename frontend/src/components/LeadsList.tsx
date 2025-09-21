@@ -205,6 +205,7 @@ export const LeadsList: FC = () => {
                     <button
                       onClick={() => verifyEmailsMutation.mutate(selectedLeads)}
                       className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+                      disabled={selectedLeads.length === 0 || verifyEmailsMutation.isPending}
                     >
                       <div className="flex items-center">
                         {verifyEmailsMutation.isPending ? (
