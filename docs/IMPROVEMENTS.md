@@ -24,26 +24,28 @@ This document outlines the most impactful improvements to enhance TinyGenesy’s
 - **Solution:** Standardize on Zod schemas + middleware.
 - **Benefit:** Type safety, consistent messages, fewer runtime errors.
 
-### 4. Temporal Connection Management
+### 4. Implement DDD + Hexagonal Architecture
 
-- **Problem:** New connections per workflow → overhead.
-- **Solution:** Singleton client, pooling, health checks, graceful shutdown.
-- **Benefit:** Faster workflows, lower resource use, better resilience.
+- **Problem:** Current codebase mixes business logic, infrastructure, and API layers, making it harder to test, extend, and maintain.
+- **Solution:** Refactor the core backend using Domain-Driven Design (DDD) principles and Hexagonal Architecture (ports & adapters). This separates domain logic from infrastructure concerns (databases, APIs, frameworks).
+- **Benefit:**
+  - Clear separation of concerns → easier testing and maintenance.
+  - Business rules become framework-agnostic → easier to evolve or migrate.
+  - Simplifies onboarding for new developers and improves long-term code quality.
 
 ---
 
 ## Priority 2 – Medium Impact
 
-5. **API Testing** – Add integration tests + fixtures for endpoints.
+5. **API Testing** – Add integration test for endpoints and e2e tests.
 6. **Frontend Component Testing** – Add React Testing Library coverage for key flows.
-7. **Optimize State Management** – React Query optimizations, memoization, loading states.
+7. **Dockerize** – Add Dockerfiles and docker-compose for improved local development and also production deploys.
 
 ---
 
 ## Priority 3 – Lower Impact
 
-8. **Dockerize** – Add Dockerfiles and docker-compose for improved local development and also production deploys.
-9. **Feature flags** – Safer rollouts, easier A/B testing, incremental delivery
-10. **Monitoring** – Implement sentry to gain observability on production errors
-11. **Security** – Rate limiting, CORS, sanitization, headers
-12. **API Docs** - Generate Open API docs
+8. **Feature flags** – Safer rollouts, easier A/B testing, incremental delivery
+9. **Monitoring** – Implement sentry to gain observability on production errors
+10. **Security** – Rate limiting, CORS, sanitization, headers
+11. **API Docs** - Generate Open API docs
