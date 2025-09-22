@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { envVariables } from '../../../../config/envVariables'
-import { FindPhoneNumberInputData, PhoneNumberProvider } from './phoneNumberProvider'
+import { FindPhoneNumberInputData, PhoneNumberProvider } from './PhoneNumberProvider'
 import z from 'zod'
 
 const astraDialerRequestBodySchema = z.object({ email: z.email() })
