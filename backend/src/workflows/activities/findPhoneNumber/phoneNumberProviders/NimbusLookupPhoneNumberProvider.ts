@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { FindPhoneNumberInputData, PhoneNumberProvider } from './PhoneNumberProvider'
+import { FindPhoneNumberInputData, PhoneNumberProvider } from './phoneNumberProvider'
 import { envVariables } from '../../../../config/envVariables'
 import z from 'zod'
 

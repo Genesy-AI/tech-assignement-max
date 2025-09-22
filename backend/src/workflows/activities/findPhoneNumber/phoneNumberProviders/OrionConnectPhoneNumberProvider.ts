@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { envVariables } from '../../../../config/envVariables'
-import { FindPhoneNumberInputData, PhoneNumberProvider } from './PhoneNumberProvider'
+import { FindPhoneNumberInputData, PhoneNumberProvider } from './phoneNumberProvider'
 import z from 'zod'
 
 const orionConnectRequestBodySchema = z.object({ fullName: z.string(), companyWebsite: z.url() })
